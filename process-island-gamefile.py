@@ -149,6 +149,7 @@ def parse_island_grid(area_ids_node: Element):
 				x = int(block.findtext('./x') or 0)
 				y = int(block.findtext('./y') or 0)
 				sub_grid = parse_double_value_grid(block.findtext('./values'), sub_grid_width, sub_grid_height)
+				sub_grid.reverse()
 				copy_grid(sub_grid, buildable_grid, x, y, )
 			elif mode == '2':
 				# entire subgrid has same values
@@ -158,6 +159,7 @@ def parse_island_grid(area_ids_node: Element):
 				value = parse_double_value_grid(block.findtext('./default'), 1, 1)[0][0]
 				sub_grid = create_empty_grid(sub_grid_width, sub_grid_height, value)
 				copy_grid(sub_grid, buildable_grid, x, y)
+		buildable_grid.reverse()
 		return buildable_grid
 	else:
 		return parse_double_value_grid(area_ids_node.findtext('./val'), width, height)
@@ -309,9 +311,9 @@ def add_to_screen_target(parser: argparse._SubParsersAction):
 	parser.add_parser('to-screen')
 
 def add_to_ad_layout_target(parser: argparse._SubParsersAction):
-	to_ad_layout_parser = parser.add_parser('to-ad-layout')
+	to_ad_layout_parser: argparse.ArgumentParser = parser.add_parser('to-ad-layout')
 	to_ad_layout_parser.add_argument('-o', '--outputFile', help='Path to output AnnoDesigner layout file')
-	to_ad_layout_parser.add_argument('-y', '--overwrite', help='Overwrites output file if exists')
+	to_ad_layout_parser.add_argument('-y', '--overwrite', help='Overwrites output file if exists', action='store_true')
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
